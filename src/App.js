@@ -28,7 +28,6 @@ class App extends Component {
     ctx = canvas.getContext('2d');
     avatar = this.refs.avatar;
     actx = avatar.getContext('2d');
-    this.redraw();
   }
 
   drawImageData(image) {
@@ -48,21 +47,39 @@ class App extends Component {
     }
   }
 
-  redraw() {
+  redraw(data) {
 
     var x = charX;
     var y = charY;
 
-    //canvas.width = canvas.width; // clears the canvas
+    avatar.width = avatar.width; // clears the canvas
     var head = new Image();
     head.src = require("./images/circle-head.png");
-    var hair = new Image();
-    hair.src = require("./images/brown-hair.png");
-    var glasses = new Image();
-    glasses.src = require("./images/glasses.png");
+
+
     actx.drawImage(head, window.innerWidth/8 , 60);
-    actx.drawImage(hair, window.innerWidth/8+30, 35);
-    //actx.drawImage(glasses, window.innerWidth/8+30, 126);
+    data[0].labelAnnotations.map((key,i)=>{
+      console.log(key);
+      if(key.description === 'glasses' || key.description === 'eyewear'){
+        var glasses = new Image();
+        glasses.src = require("./images/glasses.png");
+        actx.drawImage(glasses, window.innerWidth/8+30, 126);
+      }
+      if(key.description.includes('hair')){
+          var hair = new Image();
+          hair.src = require("./images/brown-hair.png");
+        if(key.description.includes('forehead')){
+          hair = new Image();
+      }
+        if(key.description.includes('black')){
+          hair = new Image();
+          hair.src = require("./images/black-hair.png");
+      }
+
+      actx.drawImage(hair, window.innerWidth/8+30, 35);
+    }
+  })
+
   }
 
   imageLoad(e) {
@@ -92,6 +109,7 @@ class App extends Component {
           vision.annotate(req).then((res) => {
             // handling response
             console.log(JSON.stringify(res.responses));
+            self.redraw(res.responses);
 
           }, (e) => {
             console.log('Error: ', e)
