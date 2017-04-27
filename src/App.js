@@ -61,7 +61,7 @@ class App extends Component {
       //hair
       if(key.description.includes('forehead') ){
         skinhead = true;
-        return ;
+        return true;
       }
       else if(key.description.includes('hair')){
         if(!skinhead){
@@ -79,6 +79,7 @@ class App extends Component {
         actx.drawImage(beard, window.innerWidth/8+74, 228);
       }
 
+      return true;
     })
 
     if(!skinhead){
