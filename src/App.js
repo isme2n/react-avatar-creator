@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import config from './config';
-
-import Croppie from 'croppie'
 
 import vision from "react-cloud-vision-api";
 vision.init({ auth: config.API_KEY})
 
-import a from './images/hair.png';
-
-var charX = 245;
-var charY = 185;
 var ctx,canvas,avatar,actx;
 class App extends Component {
   constructor(props){
@@ -48,38 +41,49 @@ class App extends Component {
   }
 
   redraw(data) {
-
-    var x = charX;
-    var y = charY;
-
+    var hair = new Image();
+    var skinhead = false;
     avatar.width = avatar.width; // clears the canvas
     var head = new Image();
     head.src = require("./images/circle-head.png");
 
-
-    actx.drawImage(head, window.innerWidth/8 , 60);
+    actx.drawImage(head, window.innerWidth/8+10 , 100);
     data[0].labelAnnotations.map((key,i)=>{
       console.log(key);
+
+      //eyewear
       if(key.description === 'glasses' || key.description === 'eyewear'){
         var glasses = new Image();
         glasses.src = require("./images/glasses.png");
-        actx.drawImage(glasses, window.innerWidth/8+30, 126);
+        actx.drawImage(glasses, window.innerWidth/8+40, 166);
       }
-      if(key.description.includes('hair')){
-          var hair = new Image();
+
+      //hair
+      if(key.description.includes('forehead') ){
+        skinhead = true;
+        return ;
+      }
+      else if(key.description.includes('hair')){
+        if(!skinhead){
           hair.src = require("./images/brown-hair.png");
-        if(key.description.includes('forehead')){
-          hair = new Image();
-      }
         if(key.description.includes('black')){
-          hair = new Image();
           hair.src = require("./images/black-hair.png");
+          }
+        }
       }
 
-      actx.drawImage(hair, window.innerWidth/8+30, 35);
-    }
-  })
+      //facial hair
+      if(key.description === 'facial hair'){
+        var beard = new Image();
+        beard.src = require("./images/beard.png");
+        actx.drawImage(beard, window.innerWidth/8+74, 228);
+      }
 
+    })
+
+    if(!skinhead){
+      actx.drawImage(hair, window.innerWidth/8+40, 75);
+    }
   }
 
   imageLoad(e) {
