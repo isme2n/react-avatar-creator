@@ -49,7 +49,7 @@ class App extends Component {
 
     actx.drawImage(head, window.innerWidth/8+10 , 100);
     data[0].labelAnnotations.map((key,i)=>{
-      //console.log(key);
+      console.log(key);
 
       //eyewear
       if(key.description === 'glasses' || key.description === 'eyewear'){
@@ -83,7 +83,7 @@ class App extends Component {
     })
 
     if(!skinhead){
-      actx.drawImage(hair, window.innerWidth/8+40, 75);
+      actx.drawImage(hair, window.innerWidth/8+38, 75);
     }
   }
 
