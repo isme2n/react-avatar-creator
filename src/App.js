@@ -49,7 +49,7 @@ class App extends Component {
 
     actx.drawImage(head, window.innerWidth/8+10 , 100);
     data[0].labelAnnotations.map((key,i)=>{
-      console.log(key);
+      //console.log(key);
 
       //eyewear
       if(key.description === 'glasses' || key.description === 'eyewear'){
@@ -112,7 +112,7 @@ class App extends Component {
           // send single request
           vision.annotate(req).then((res) => {
             // handling response
-            console.log(JSON.stringify(res.responses));
+            //console.log(JSON.stringify(res.responses));
             self.redraw(res.responses);
 
           }, (e) => {
@@ -155,20 +155,31 @@ class App extends Component {
     ctx.putImageData(filteredData, 0 , 0);
   }
 
+  exportFile(){
+    var a = document.getElementById("avatar");
+    var data = a.toDataURL("image/png");
+    this.setState({
+      uploaded:data
+    })
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>React Image Filter</h2>
+          <h2>React Avatar Creator</h2>
         </div>
         <div>
           <div id="can"></div>
 
               <div id="canto"></div>
           <canvas id="canvas" ref="canvas" width={window.innerWidth/2} height={window.innerWidth/2}></canvas>
-          <canvas id="canvas" ref="avatar" width={window.innerWidth/2} height={window.innerWidth/2}></canvas><br/>
+          <canvas id="avatar" ref="avatar" width={window.innerWidth/2} height={window.innerWidth/2}></canvas><br/>
           <input id="loadButton" onChange={this.imageLoad.bind(this)} type="file" accept="image/*"/>
-          <button id="restoreButton" onClick={this.restore} disabled={this.state.img ? false : true}>원본보기</button>
+          <button onClick={this.exportFile.bind(this)}>export</button><br/>
+          {this.state.uploaded? <a href={this.state.uploaded} download="myAvatar.png" target="_blank">
+          이미지 다운로드
+        </a> : null}
         </div>
       </div>
     );
