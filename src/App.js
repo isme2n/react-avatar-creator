@@ -10,11 +10,11 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      img : false
+      img : false,
+      accepted: [],
+      rejected: []
     }
 
-    this.filter = this.filter.bind(this);
-    this.restore = this.restore.bind(this);
   }
   componentDidMount() {
     canvas = this.refs.canvas;
@@ -49,7 +49,7 @@ class App extends Component {
 
     actx.drawImage(head, window.innerWidth/8+10 , 100);
     data[0].labelAnnotations.map((key,i)=>{
-      console.log(key);
+      // console.log(key);
 
       //eyewear
       if(key.description === 'glasses' || key.description === 'eyewear'){
@@ -79,7 +79,6 @@ class App extends Component {
         actx.drawImage(beard, window.innerWidth/8+74, 228);
       }
 
-      return true;
     })
 
     if(!skinhead){
@@ -132,30 +131,6 @@ class App extends Component {
     }
   }
 
-  restore(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    this.calcSize(this.state.img);
-
-    ctx.drawImage(this.state.img, 0, (canvas.offsetHeight-this.state.img.height)/2, this.state.img.width, this.state.img.height);
-  }
-
-  filter(func) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    this.calcSize(this.state.img);
-
-    ctx.drawImage(this.state.img, 0, (canvas.offsetHeight-this.state.img.height)/2, this.state.img.width, this.state.img.height);
-    // imageData를 가져온다.
-    var pixels = ctx.getImageData(0,0, canvas.width, canvas.height);
-
-    // image processing
-    var filteredData = func(pixels);
-
-    // Canvas에 다시 그린다.
-    ctx.putImageData(filteredData, 0 , 0);
-  }
-
   exportFile(){
     var a = document.getElementById("avatar");
     var data = a.toDataURL("image/png");
@@ -171,16 +146,13 @@ class App extends Component {
           <h2>React Avatar Creator</h2>
         </div>
         <div>
-          <div id="can"></div>
-
-              <div id="canto"></div>
-          <canvas id="canvas" ref="canvas" width={window.innerWidth/2} height={window.innerWidth/2}></canvas>
-          <canvas id="avatar" ref="avatar" width={window.innerWidth/2} height={window.innerWidth/2}></canvas><br/>
           <input id="loadButton" onChange={this.imageLoad.bind(this)} type="file" accept="image/*"/>
           <button onClick={this.exportFile.bind(this)}>export</button><br/>
           {this.state.uploaded? <a href={this.state.uploaded} download="myAvatar.png" target="_blank">
           이미지 다운로드
         </a> : null}
+          <canvas id="canvas" ref="canvas" width={window.innerWidth/2-25} height={window.innerWidth/2}></canvas>
+          <canvas id="avatar" ref="avatar" width={window.innerWidth/2-25} height={window.innerWidth/2}></canvas><br/>
         </div>
       </div>
     );

@@ -6,7 +6,6 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
-    "croppie": "^2.4.1",
     "react": "^15.5.4",
     "react-cloud-vision-api": "^0.3.0",
     "react-dom": "^15.5.4"
